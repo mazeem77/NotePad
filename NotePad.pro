@@ -13,14 +13,20 @@ CONFIG += c++11
 SOURCES += \
     databasehandler.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    signin.cpp \
+    signup.cpp
 
 HEADERS += \
     databasehandler.h \
-    mainwindow.h
+    mainwindow.h \
+    signin.h \
+    signup.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    signin.ui \
+    signup.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,3 +1,5 @@
+#include <signup.h>
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -20,5 +22,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    SignUp *su;
 };
 #endif // MAINWINDOW_H

@@ -27,6 +27,18 @@ void DatabaseHandler::signup(const QString &email, const QString &password)
     performPOST(signupEndPoint, Qjson);
 }
 
+void DatabaseHandler::signin(const QString &email, const QString &password)
+{
+    QString signinEndPoint = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apikey;
+    QVariantMap Qvar;
+    Qvar ["email"] = email;
+    Qvar ["password"] = password;
+    Qvar ["returnSecureToken"] = true;
+
+    QJsonDocument Qjson = QJsonDocument::fromVariant(Qvar);
+    performPOST(signinEndPoint, Qjson);
+}
+
 void DatabaseHandler::QReplyReadyRead()
 {
     qDebug() << Qreply->readAll();
