@@ -22,19 +22,51 @@ SignUp::~SignUp()
 
 bool SignUp::emailTest(QString mail)
 {
-    std::string Email = mail.toStdString();
-    int lim = Email.length();
-    for(int i=0; i < lim; i++){
-        if (Email[i] == '@'){
-            for(int j=0; j < lim; j++){
-                if(Email[i] == '.' && Email[i+1] == 'c' && Email[i+2] == 'o' && Email[i+3] == 'm' && Email[i-1] == '@'){
-                    return true;
-                }
+    std::string email = mail.toStdString();
+    bool atCheck = false;
+    bool comCheck = false;
+
+    std::string temp = ".com";
+    int length = email.length();
+    for (int i = 0; i < length; i++)
+    {
+        if (email[i] == '@')
+        {
+            atCheck = true;
+            break;
+        }
+    }
+
+    if (atCheck == true)
+    {
+        if (email[email.length() - 5] == '@')
+        {
+            return false;
+        }
+        comCheck = true;
+        for (int i = 4; i > 0; i--)
+        {
+            if (email[length - i] == temp[4 - i])
+            {
+                continue;
+            }
+            else
+            {
+                comCheck = false;
+                break;
             }
         }
     }
-//    return false;
+    if (atCheck && comCheck)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
+
 
 void SignUp::on_signin_button_clicked()
 {

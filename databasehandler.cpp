@@ -16,7 +16,7 @@ void DatabaseHandler::setAPIkey(const QString &apikey)
     this->apikey = apikey;
 }
 
-QString DatabaseHandler::signup(const QString &email, const QString &password)
+void DatabaseHandler::signup(const QString &email, const QString &password)
 {
     QString signupEndPoint = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + apikey;
     QVariantMap Qvar;
@@ -26,6 +26,8 @@ QString DatabaseHandler::signup(const QString &email, const QString &password)
 
     QJsonDocument Qjson = QJsonDocument::fromVariant(Qvar);
     performPOST(signupEndPoint, Qjson);
+
+    qDebug() << "yahan tuk";
 }
 
 void DatabaseHandler::signin(const QString &email, const QString &password)
@@ -77,8 +79,7 @@ void DatabaseHandler::parseResponse(const QByteArray &Qbt)
     QJsonDocument QJSON = QJsonDocument::fromJson(Qbt);
 
     if(QJSON.object().contains("error")){
-        SignUp si;
-        si.response = "Email not Correct";
+        qDebug() << "Error";
     }
     else if (QJSON.object().contains("localId")){
         localid = QJSON.object().value("localId").toString();
