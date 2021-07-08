@@ -1,4 +1,5 @@
 #include "databasehandler.h"
+#include "tosignup.h"
 
 DatabaseHandler::DatabaseHandler(QObject *parent) : QObject(parent) ,apikey(QString())
 {
@@ -15,7 +16,7 @@ void DatabaseHandler::setAPIkey(const QString &apikey)
     this->apikey = apikey;
 }
 
-void DatabaseHandler::signup(const QString &email, const QString &password)
+QString DatabaseHandler::signup(const QString &email, const QString &password)
 {
     QString signupEndPoint = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + apikey;
     QVariantMap Qvar;
@@ -47,6 +48,11 @@ void DatabaseHandler::realtime(const QString &fname, const QString &lname, const
     QV ["User Name"] = uname;
 
     QJsonDocument QJ = QJsonDocument::fromVariant(QV);
+    QString url = "https://practice-e90c6-default-rtdb.firebaseio.com/" + localid + ".json";
+    QNetworkRequest QNR((QUrl(url)));
+    QNR.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
+    Qreply = Qman->put(QNR, QJ.toJson());
+    connect(Qreply, &QNetworkReply::readyRead, this, &DatabaseHandler::QReplyReadyRead);
 }
 
 void DatabaseHandler::QReplyReadyRead()
@@ -71,7 +77,8 @@ void DatabaseHandler::parseResponse(const QByteArray &Qbt)
     QJsonDocument QJSON = QJsonDocument::fromJson(Qbt);
 
     if(QJSON.object().contains("error")){
-        qDebug() << "Error";
+        SignUp si;
+        si.response = "Email not Correct";
     }
     else if (QJSON.object().contains("localId")){
         localid = QJSON.object().value("localId").toString();
