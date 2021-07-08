@@ -7,6 +7,7 @@
 #include <QNetworkRequest>
 #include <QJsonDocument>
 #include <QVariantMap>
+#include <QJsonObject>
 
 class DatabaseHandler:public QObject
 {
@@ -16,6 +17,7 @@ public:
     void setAPIkey(const QString &apikey);
     void signup(const QString &email, const QString &password);
     void signin(const QString &email, const QString &password);
+    void realtime(const QString &fname, const QString &lname, const QString &uname);
 
 public slots:
     void QReplyReadyRead();
@@ -23,6 +25,8 @@ public slots:
 private:
     void performPOST(const QString &url, const QJsonDocument &payload);
     QString apikey;
+    QString localid;
+    void parseResponse(const QByteArray &Qbt);
     QNetworkAccessManager *Qman;
     QNetworkReply *Qreply;
 };

@@ -39,10 +39,22 @@ void DatabaseHandler::signin(const QString &email, const QString &password)
     performPOST(signinEndPoint, Qjson);
 }
 
+void DatabaseHandler::realtime(const QString &fname, const QString &lname, const QString &uname)
+{
+    QVariantMap QV;
+    QV ["First Name"] = fname;
+    QV ["Last Name"] = lname;
+    QV ["User Name"] = uname;
+
+    QJsonDocument QJ = QJsonDocument::fromVariant(QV);
+}
+
 void DatabaseHandler::QReplyReadyRead()
 {
-    qDebug() << Qreply->readAll();
+    QByteArray Qbt = Qreply->readAll();
     Qreply->deleteLater();
+
+    parseResponse(Qbt);
 }
 
 void DatabaseHandler::performPOST(const QString &url, const QJsonDocument &payload)
@@ -52,6 +64,19 @@ void DatabaseHandler::performPOST(const QString &url, const QJsonDocument &paylo
     Qreply = Qman->post(Qreq, payload.toJson());
     qDebug() << Qreply;
     connect(Qreply, &QNetworkReply::readyRead, this, &DatabaseHandler::QReplyReadyRead);
+}
+
+void DatabaseHandler::parseResponse(const QByteArray &Qbt)
+{
+    QJsonDocument QJSON = QJsonDocument::fromJson(Qbt);
+
+    if(QJSON.object().contains("error")){
+        qDebug() << "Error";
+    }
+    else if (QJSON.object().contains("localId")){
+        localid = QJSON.object().value("localId").toString();
+        qDebug() << localid;
+    }
 }
 
 
