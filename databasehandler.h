@@ -8,16 +8,18 @@
 #include <QJsonDocument>
 #include <QVariantMap>
 #include <QJsonObject>
+#include <QWidget>
 
-class DatabaseHandler:public QObject
+class DatabaseHandler:public QWidget
 {
 public:
-    explicit DatabaseHandler(QObject *parent = nullptr);
+    explicit DatabaseHandler(QWidget *parent = nullptr);
     ~DatabaseHandler();
     void setAPIkey(const QString &apikey);
     void signup(const QString &email, const QString &password);
     void signin(const QString &email, const QString &password);
     void realtime(const QString &fname, const QString &lname, const QString &uname);
+    void errorhandling();
 
 public slots:
     void QReplyReadyRead();

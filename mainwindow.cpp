@@ -19,7 +19,8 @@ MainWindow::~MainWindow()
 void MainWindow::on_pushButton_clicked()
 {
     su = new SignUp(this);
-    su->show();
+    su->exec();
     this->hide();
+    su->deleteLater();
 }
 

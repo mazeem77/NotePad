@@ -1,7 +1,10 @@
 #include "databasehandler.h"
 #include "tosignup.h"
+#include <QMessageBox>
+#include <QIcon>
+#include <QPushButton>
 
-DatabaseHandler::DatabaseHandler(QObject *parent) : QObject(parent) ,apikey(QString())
+DatabaseHandler::DatabaseHandler(QWidget *parent) : QWidget(parent) ,apikey(QString())
 {
     Qman = new QNetworkAccessManager();
 }
@@ -57,6 +60,19 @@ void DatabaseHandler::realtime(const QString &fname, const QString &lname, const
     connect(Qreply, &QNetworkReply::readyRead, this, &DatabaseHandler::QReplyReadyRead);
 }
 
+void DatabaseHandler::errorhandling()
+{
+    int x = QMessageBox::information(this, tr("Error"), tr("Email already exists\nWant to LogIn?"), QMessageBox::Ok, QMessageBox::Cancel);
+    if(x == QMessageBox::Ok){
+        SignIn si;
+        si.setModal(true);
+        si.exec();
+    }
+    else {
+
+    }
+}
+
 void DatabaseHandler::QReplyReadyRead()
 {
     QByteArray Qbt = Qreply->readAll();
@@ -80,10 +96,19 @@ void DatabaseHandler::parseResponse(const QByteArray &Qbt)
 
     if(QJSON.object().contains("error")){
         qDebug() << "Error";
+        errorhandling();
     }
     else if (QJSON.object().contains("localId")){
         localid = QJSON.object().value("localId").toString();
         qDebug() << localid;
+        QMessageBox msg;
+        msg.setText("Signup Successfully");
+        int x = msg.exec();
+        if (x == QMessageBox::Ok){
+            SignIn si;
+            si.setModal(true);
+            si.exec();
+        }
     }
 }
 

@@ -1,12 +1,16 @@
 #include "signup.h"
 #include "ui_signup.h"
+#include <QMessageBox>
+#include "mainwindow.h"
 
 SignUp::SignUp(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SignUp)
 {
     ui->setupUi(this);
+    emit(QDialog::done(1));
     this->setWindowTitle("SignUp");
+    this->setAttribute(Qt::WA_DeleteOnClose);
     ui->firstName->setPlaceholderText("First Name");
     ui->secondName->setPlaceholderText("Last Name");
     ui->userName->setPlaceholderText("Username");
@@ -18,6 +22,8 @@ SignUp::SignUp(QWidget *parent) :
 SignUp::~SignUp()
 {
     delete ui;
+    delete dbh;
+    this->close();
 }
 
 bool SignUp::emailTest(QString mail)
@@ -95,6 +101,7 @@ void SignUp::on_signup_button_clicked()
                             dbh = new DatabaseHandler(this);
                             dbh->setAPIkey("AIzaSyAoB27uJgJKRfy9l_DewZvTUkVJDeGH5mY");
                             dbh->signup(Email, Pass);
+//                            this->hide();
                         }
                     else ui->signup_text->setText("Please Enter correct Email!");
                     }

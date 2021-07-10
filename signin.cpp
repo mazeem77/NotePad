@@ -7,6 +7,7 @@ SignIn::SignIn(QWidget *parent) :
     ui(new Ui::SignIn)
 {
     ui->setupUi(this);
+    this->setAttribute(Qt::WA_DeleteOnClose);
     ui->email->setPlaceholderText("Email");
     ui->password->setPlaceholderText("Password");
 }
